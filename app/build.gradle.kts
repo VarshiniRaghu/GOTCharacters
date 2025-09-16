@@ -71,4 +71,9 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(kotlin("test"))
+
 }

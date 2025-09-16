@@ -1,14 +1,15 @@
 package com.example.gotcharacters.home.ui
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gotcharacters.home.business.model.GOTCharactersItemsResult
 import com.example.gotcharacters.home.business.model.GOTCharactersResult
 import com.example.gotcharacters.home.business.usecase.GetGOTCharactersUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,20 +18,26 @@ internal class CharactersViewModel @Inject constructor(
     private val getGOTCharactersUsecase: GetGOTCharactersUsecase
 ) : ViewModel() {
 
-    var state by mutableStateOf(
+    private val _state = MutableStateFlow(
         CharactersUiState(
             charactersItems = emptyList()
         )
     )
+    val state: StateFlow<CharactersUiState> = _state
+    private val errorMessageToDisplay: String = "Error"
 
-    fun loadDebugOptions() = viewModelScope.launch {
+    private val _events = MutableSharedFlow<CharactersUiEvent>()
+    val events: Flow<CharactersUiEvent> = _events
+
+    fun loadCharactersList() = viewModelScope.launch {
         when(val result = getGOTCharactersUsecase()) {
-            GOTCharactersItemsResult.NoInternet -> Unit
-            GOTCharactersItemsResult.ServerErrror -> Unit
+            GOTCharactersItemsResult.NoInternet -> _events.emit(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
+            GOTCharactersItemsResult.ServerErrror -> _events.emit(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
             is GOTCharactersItemsResult.Success -> {
-                state = state.copy(charactersItems = result.items.map{
+                _state.value = _state.value.copy(charactersItems = result.items.map{
                     mapToUI(it)
                 })
+                _events.emit(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
             }
         }
     }
@@ -38,6 +45,11 @@ internal class CharactersViewModel @Inject constructor(
     internal data class CharactersUiState(
         val charactersItems: List<CharactersUi>
     )
+
+    internal sealed class CharactersUiEvent {
+        data object Idle: CharactersUiEvent()
+        data class ShowSnackBarError(val message: String) : CharactersUiEvent()
+    }
 
 }
 
