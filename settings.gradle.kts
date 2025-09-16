@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "GOTCharactersApp"
 include(":app")
- 
+include(":core")
