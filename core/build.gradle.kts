@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.core"
+    namespace = "com.example.gotcharactersapp.core"
     compileSdk = 36
 
     defaultConfig {
@@ -38,7 +38,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -46,6 +45,10 @@ dependencies {
     // Compose
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
 
     // Dependency injection
     implementation(libs.hilt.android)

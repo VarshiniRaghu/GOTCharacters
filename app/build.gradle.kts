@@ -2,14 +2,16 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.example.gotcharactersapp"
+    namespace = "com.example.gotcharacters"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.gotcharactersapp"
+        applicationId = "com.example.gotcharacters"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -48,7 +50,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,5 +58,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.compose.material3)
 
+    // Dependency injection
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
+
+    // Networking
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp.logging)
+
+    implementation(libs.retrofit)
+    implementation(libs.gson.converter)
 }
