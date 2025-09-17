@@ -15,7 +15,7 @@ public class ViewModelFlowCollector<S, E>(
     private val stateFlow: Flow<S>,
     private val eventFlow: Flow<E>,
 ) {
-    public fun test(test: suspend TestScope.(List<S>, List<E>) -> Unit): Unit = runBlocking {
+    public fun test(test: suspend TestScope.(List<S>, List<E>) -> Unit): Unit = runTest {
         val states = mutableListOf<S>()
         val stateJob = launch { stateFlow.toList(states) }
         val events = mutableListOf<E>()

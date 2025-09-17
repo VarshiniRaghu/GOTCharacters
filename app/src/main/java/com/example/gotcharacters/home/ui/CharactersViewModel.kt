@@ -6,10 +6,13 @@ import com.example.gotcharacters.home.business.model.GOTCharactersItemsResult
 import com.example.gotcharacters.home.business.model.GOTCharactersResult
 import com.example.gotcharacters.home.business.usecase.GetGOTCharactersUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,18 +29,18 @@ internal class CharactersViewModel @Inject constructor(
     val state: StateFlow<CharactersUiState> = _state
     private val errorMessageToDisplay: String = "Error"
 
-    private val _events = MutableSharedFlow<CharactersUiEvent>()
-    val events: Flow<CharactersUiEvent> = _events
+    private val _events = Channel<CharactersUiEvent>()
+    val events = _events.receiveAsFlow()
 
     fun loadCharactersList() = viewModelScope.launch {
         when(val result = getGOTCharactersUsecase()) {
-            GOTCharactersItemsResult.NoInternet -> _events.emit(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
-            GOTCharactersItemsResult.ServerErrror -> _events.emit(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
+            GOTCharactersItemsResult.NoInternet -> _events.send(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
+            GOTCharactersItemsResult.ServerErrror -> _events.send(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
             is GOTCharactersItemsResult.Success -> {
                 _state.value = _state.value.copy(charactersItems = result.items.map{
                     mapToUI(it)
                 })
-                _events.emit(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
+                _events.send(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
             }
         }
     }

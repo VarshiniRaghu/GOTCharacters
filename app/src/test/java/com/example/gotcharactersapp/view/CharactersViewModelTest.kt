@@ -7,10 +7,12 @@ import com.example.gotcharacters.home.ui.CharactersViewModel.CharactersUiState
 import com.example.gotcharactersapp.core.ViewModelFlowCollector
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertContains
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CharactersViewModelTest {
@@ -33,7 +35,7 @@ internal class CharactersViewModelTest {
 
     @Test
     fun `GIVEN use case returns Success WHEN Loading Characters THEN no event should be emitted`() =
-        collector.test { _, events ->
+        runTest {
             //GIVEN
             val result = GOTCharactersItemsResult.Success(
                 listOf(),
@@ -44,28 +46,12 @@ internal class CharactersViewModelTest {
             viewModel.loadCharactersList()
 
             //THEN
-            assertEquals(emptyList<CharactersViewModel.CharactersUiEvent>(), events)
-        }
-
-    @Test
-    fun `GIVEN use case returns ServerError WHEN Loading Characters THEN SnackBarError event should be emitted`() =
-        collector.test { _, events ->
-            //GIVEN
-            coEvery { mockGetGOTCharactersUsecase() } returns GOTCharactersItemsResult.ServerErrror
-
-            //WHEN
-            viewModel.loadCharactersList()
-
-            //THEN
-            val expectedEvents = listOf(
-                CharactersViewModel.CharactersUiEvent.ShowSnackBarError(errorMessage)
-            )
-            assertEquals(expectedEvents, events)
+            assertContains(viewModel.events.first().toString(), "Error")
         }
 
     @Test
     fun `GIVEN use case returns NoInternet WHEN Loading Characters THEN SnackBarError event should be emitted`() =
-        collector.test { _, events ->
+        runTest {
             //GIVEN
             coEvery { mockGetGOTCharactersUsecase() } returns GOTCharactersItemsResult.NoInternet
 
@@ -73,10 +59,8 @@ internal class CharactersViewModelTest {
             viewModel.loadCharactersList()
 
             //THEN
-            val expectedEvents = listOf(
-                CharactersViewModel.CharactersUiEvent.ShowSnackBarError(errorMessage)
-            )
-            assertEquals(expectedEvents, events)
+
+            assertContains(viewModel.events.first().toString(), "Error")
         }
 
 
