@@ -13,13 +13,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 internal fun CharactersScreen() {
     val viewModel = hiltViewModel<CharactersViewModel>()
     LaunchedEffect(Unit) { viewModel.loadCharactersList() }
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
     val charactersUiState by viewModel.state.collectAsStateWithLifecycle()
     val charactersUiEvent by viewModel.events.collectAsState(initial = CharactersViewModel.CharactersUiEvent.Idle)
 
     LaunchedEffect(charactersUiEvent) {
         when (charactersUiEvent) {
-            is CharactersViewModel.CharactersUiEvent.ShowSnackBarError -> snackbarHostState.showSnackbar(
+            is CharactersViewModel.CharactersUiEvent.ShowSnackBarError -> snackBarHostState.showSnackbar(
                 message = "Error"
             )
 
