@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +21,8 @@ internal class CharactersViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(
         CharactersUiState(
-            charactersItems = emptyList()
+            charactersItems = emptyList(),
+            filteredItems = emptyList()
         )
     )
     val state: StateFlow<CharactersUiState> = _state
@@ -38,15 +40,28 @@ internal class CharactersViewModel @Inject constructor(
             )
 
             is GOTCharactersItemsResult.Success -> {
-                _state.value = _state.value.copy(charactersItems = result.items.map {
+                val initialCharactersItems = result.items.map {
                     mapToUI(it)
-                })
+                }
+                _state.update {
+                    it.copy(charactersItems = initialCharactersItems, filteredItems = initialCharactersItems)
+                }
             }
         }
     }
 
+    fun setSearchText(searchText: String) = viewModelScope.launch {
+        _state.update { uiState ->
+            if (searchText.isEmpty())
+                uiState.copy(filteredItems = uiState.charactersItems)
+            else uiState.copy(
+                filteredItems = _state.value.charactersItems.filter { it.name.contains(searchText) })
+        }
+    }
+
     internal data class CharactersUiState(
-        val charactersItems: List<CharactersUi>
+        val charactersItems: List<CharactersUi>,
+        val filteredItems: List<CharactersUi>
     )
 
     internal sealed class CharactersUiEvent {
@@ -77,8 +92,8 @@ internal fun mapToUI(result: GOTCharactersResult): CharactersUi =
         gender = result.gender,
         culture = result.culture,
         diedDetails = result.diedDetails,
-        titlesList = result.titlesList?: emptyList(),
-        aliasNames = result.aliasNames?: emptyList(),
+        titlesList = result.titlesList ?: emptyList(),
+        aliasNames = result.aliasNames ?: emptyList(),
         seasonsDetails = result.seasonsDetails,
-        playedByNames = result.playedByNames?: emptyList()
+        playedByNames = result.playedByNames ?: emptyList()
     )

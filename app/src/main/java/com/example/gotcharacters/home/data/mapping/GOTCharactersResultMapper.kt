@@ -44,7 +44,7 @@ internal class GOTCharactersResultMapper @Inject constructor() {
             seasonInRoman
         }
 
-        return "Season $allSeasons"
+        return "Season ${allSeasons?.joinToString()}"
 
     }
 }
