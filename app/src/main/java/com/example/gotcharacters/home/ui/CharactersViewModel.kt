@@ -50,6 +50,7 @@ internal class CharactersViewModel @Inject constructor(
         }
     }
 
+    /* Used to filter search text from name */
     fun setSearchText(searchText: String) = viewModelScope.launch {
         _state.update { uiState ->
             if (searchText.isEmpty())
@@ -61,7 +62,7 @@ internal class CharactersViewModel @Inject constructor(
 
     internal data class CharactersUiState(
         val charactersItems: List<CharactersUi>,
-        val filteredItems: List<CharactersUi>
+        val filteredItems: List<CharactersUi> // Filtered list is used to display searched text results
     )
 
     internal sealed class CharactersUiEvent {

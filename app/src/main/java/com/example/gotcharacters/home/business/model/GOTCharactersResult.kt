@@ -10,6 +10,7 @@ internal data class GOTCharactersResult (
 
     val aliasNames: List<String>?,
 
+    //Seasons details is string which is joined from seasons list
     val seasonsDetails: String,
 
     val playedByNames: List<String>?

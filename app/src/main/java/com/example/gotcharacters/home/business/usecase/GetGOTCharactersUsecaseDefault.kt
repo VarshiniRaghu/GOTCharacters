@@ -6,13 +6,16 @@ import com.example.gotcharacters.home.data.model.response.GOTCharacterNetworkRes
 import com.example.gotcharacters.home.data.repository.GOTCharactersRepository
 import javax.inject.Inject
 
+/** GOTCharactersUSeCase implementation **/
 internal class GetGOTCharactersUsecaseDefault @Inject constructor(
     private val repository: GOTCharactersRepository,
     private val resultMapper: GOTCharactersResultMapper
 ) : GetGOTCharactersUsecase {
+
     override suspend fun invoke(): GOTCharactersItemsResult {
         return when (val response = repository.getCharactersItems()) {
-            GOTCharacterNetworkResponse.NoInternet -> GOTCharactersItemsResult.Error
+            //Business logic goes here, converting integers to Roman in mapper
+            GOTCharacterNetworkResponse.NoInternet,
             GOTCharacterNetworkResponse.ServerError -> GOTCharactersItemsResult.Error
             is GOTCharacterNetworkResponse.Success -> {
                 resultMapper.mapResult(response.items)

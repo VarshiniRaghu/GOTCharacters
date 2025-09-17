@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 
+/* Dependency Injection (dagger, Hilt) class to inject repository and usecase implementation classes */
 @Module
 @InstallIn(ViewModelComponent::class)
 internal abstract class HomeModule {

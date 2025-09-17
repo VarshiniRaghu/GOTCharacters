@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException
 import java.io.IOException
 import javax.inject.Inject
 
+/** Repository implementation */
 internal class GOTCharactersRepositoryDefault @Inject constructor(
     private val api: GOTCharactersApi,
     private val mapper: GOTCharactersResponseMapper

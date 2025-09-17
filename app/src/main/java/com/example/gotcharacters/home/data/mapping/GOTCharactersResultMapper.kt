@@ -28,6 +28,7 @@ internal class GOTCharactersResultMapper @Inject constructor() {
     }
 
     private fun convertToRomanNumerals(seasons: List<String>?): String {
+        //Can be recursive function for calculating for all the numbers, As seasons are 8, hardcoding it here
         val allSeasons = seasons?.map { season ->
             val seasonNumber = season.filter { it.isDigit() }
             val seasonInRoman = when (seasonNumber) {

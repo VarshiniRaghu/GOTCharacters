@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 internal data class GOTCharactersApiJson(
 
+    /** aliasName, titlesList and playedByNames are not used yet and can be used for details page */
+
     @SerializedName("name")
     val name: String,
 
