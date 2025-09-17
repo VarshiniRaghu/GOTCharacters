@@ -14,7 +14,6 @@ hilt = "2.56.2"
 ksp = "2.1.21-2.0.2"
 okhttp = "4.12.0"
 retrofit = "2.9.0"
-spotless = "7.0.4"
 androidxHiltNavigationCompose = "1.2.0"
 mockk = "1.14.5"
 coroutines = "1.10.2"
@@ -57,4 +56,3 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
