@@ -51,7 +51,13 @@ private fun CharactersListLayout(
         listOf(
             CharactersUi(
                 name = "",
-                gender = ""
+                gender = "",
+                culture = "",
+                diedDetails = "",
+                titlesList = emptyList(),
+                aliasNames = emptyList(),
+                seasonsDetails = "",
+                playedByNames = emptyList()
             )
         )
     ),
@@ -62,8 +68,7 @@ private fun CharactersListLayout(
                 items = state.charactersItems,
                 itemContent = {
                     CharactersItem(
-                        title = it.name,
-                       gender = it.gender
+                        it
                     )
                 }
             )
@@ -73,8 +78,7 @@ private fun CharactersListLayout(
 
 @Composable
 private fun CharactersItem(
-    title: String = "Name",
-    gender: String = "gender"
+    charactersUi: CharactersUi
 ) {
     Card(
         modifier = Modifier
@@ -88,12 +92,24 @@ private fun CharactersItem(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 fontSize = 32.sp,
-                text = title
+                text = charactersUi.name
+            )
+            if(charactersUi.culture.isEmpty().not())
+                Text(
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 16.sp,
+                text = charactersUi.culture
+            )
+            if(charactersUi.diedDetails.isEmpty().not())
+                Text(
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 16.sp,
+                text = "Died ${charactersUi.diedDetails}"
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 fontSize = 16.sp,
-                text = gender
+                text = charactersUi.seasonsDetails
             )
         }
     }

@@ -10,7 +10,13 @@ internal class GOTCharactersResponseMapper @Inject constructor() {
     private fun GOTCharactersApiJson.toResponse(): GOTCharactersResponse {
         return GOTCharactersResponse(
             name = this.name,
-            gender = this.gender
+            gender = this.gender,
+            culture = this.culture,
+            diedDetails = this.diedDetails ?: "",
+            titlesList = this.titlesList,
+            aliasNames = this.aliasNames,
+            seasonsDetails = this.seasonsDetails,
+            playedByNames = this.playedByNames,
         )
     }
 

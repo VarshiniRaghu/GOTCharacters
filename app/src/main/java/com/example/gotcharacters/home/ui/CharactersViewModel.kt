@@ -58,8 +58,27 @@ internal class CharactersViewModel @Inject constructor(
 
 internal class CharactersUi(
     val name: String,
-    val gender: String
+    val gender: String,
+    val culture: String,
+    val diedDetails: String,
+
+    val titlesList: List<String>,
+
+    val aliasNames: List<String>,
+
+    val seasonsDetails: String,
+
+    val playedByNames: List<String>
 )
 
 internal fun mapToUI(result: GOTCharactersResult): CharactersUi =
-    CharactersUi(result.name, result.gender)
+    CharactersUi(
+        name = result.name,
+        gender = result.gender,
+        culture = result.culture,
+        diedDetails = result.diedDetails,
+        titlesList = result.titlesList?: emptyList(),
+        aliasNames = result.aliasNames?: emptyList(),
+        seasonsDetails = result.seasonsDetails,
+        playedByNames = result.playedByNames?: emptyList()
+    )

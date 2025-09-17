@@ -8,5 +8,23 @@ internal data class GOTCharactersApiJson(
     val name: String,
 
     @SerializedName("gender")
-    val gender: String
+    val gender: String,
+
+    @SerializedName("culture")
+    val culture: String,
+
+    @SerializedName("died")
+    val diedDetails: String?,
+
+    @SerializedName("titles")
+    val titlesList: List<String>,
+
+    @SerializedName("alias")
+    val aliasNames: List<String>,
+
+    @SerializedName("tvSeries")
+    val seasonsDetails: List<String>,
+
+    @SerializedName("playedBy")
+    val playedByNames: List<String>
 )
