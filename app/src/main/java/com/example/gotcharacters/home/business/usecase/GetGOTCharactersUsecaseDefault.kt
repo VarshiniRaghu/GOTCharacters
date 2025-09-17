@@ -9,11 +9,11 @@ import javax.inject.Inject
 internal class GetGOTCharactersUsecaseDefault @Inject constructor(
     private val repository: GOTCharactersRepository,
     private val resultMapper: GOTCharactersResultMapper
-): GetGOTCharactersUsecase{
+) : GetGOTCharactersUsecase {
     override suspend fun invoke(): GOTCharactersItemsResult {
         return when (val response = repository.getCharactersItems()) {
-            GOTCharacterNetworkResponse.NoInternet -> GOTCharactersItemsResult.NoInternet
-            GOTCharacterNetworkResponse.ServerError -> GOTCharactersItemsResult.ServerErrror
+            GOTCharacterNetworkResponse.NoInternet -> GOTCharactersItemsResult.Error
+            GOTCharacterNetworkResponse.ServerError -> GOTCharactersItemsResult.Error
             is GOTCharacterNetworkResponse.Success -> {
                 resultMapper.mapResult(response.items)
             }

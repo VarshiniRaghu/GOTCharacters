@@ -6,6 +6,5 @@ internal sealed class GOTCharactersItemsResult {
         val items: List<GOTCharactersResult>
     ): GOTCharactersItemsResult()
 
-    data object ServerErrror: GOTCharactersItemsResult()
-    data object NoInternet : GOTCharactersItemsResult()
+    data object Error: GOTCharactersItemsResult()
 }

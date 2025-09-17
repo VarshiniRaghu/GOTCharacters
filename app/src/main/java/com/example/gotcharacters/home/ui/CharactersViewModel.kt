@@ -7,10 +7,7 @@ import com.example.gotcharacters.home.business.model.GOTCharactersResult
 import com.example.gotcharacters.home.business.usecase.GetGOTCharactersUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -33,14 +30,17 @@ internal class CharactersViewModel @Inject constructor(
     val events = _events.receiveAsFlow()
 
     fun loadCharactersList() = viewModelScope.launch {
-        when(val result = getGOTCharactersUsecase()) {
-            GOTCharactersItemsResult.NoInternet -> _events.send(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
-            GOTCharactersItemsResult.ServerErrror -> _events.send(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
+        when (val result = getGOTCharactersUsecase()) {
+            GOTCharactersItemsResult.Error -> _events.send(
+                CharactersUiEvent.ShowSnackBarError(
+                    errorMessageToDisplay
+                )
+            )
+
             is GOTCharactersItemsResult.Success -> {
-                _state.value = _state.value.copy(charactersItems = result.items.map{
+                _state.value = _state.value.copy(charactersItems = result.items.map {
                     mapToUI(it)
                 })
-                _events.send(CharactersUiEvent.ShowSnackBarError(errorMessageToDisplay))
             }
         }
     }
@@ -50,15 +50,16 @@ internal class CharactersViewModel @Inject constructor(
     )
 
     internal sealed class CharactersUiEvent {
-        data object Idle: CharactersUiEvent()
+        data object Idle : CharactersUiEvent()
         data class ShowSnackBarError(val message: String) : CharactersUiEvent()
     }
 
 }
 
-internal class CharactersUi (
+internal class CharactersUi(
     val name: String,
     val gender: String
 )
 
-internal fun mapToUI(result: GOTCharactersResult): CharactersUi = CharactersUi(result.name, result.gender)
+internal fun mapToUI(result: GOTCharactersResult): CharactersUi =
+    CharactersUi(result.name, result.gender)

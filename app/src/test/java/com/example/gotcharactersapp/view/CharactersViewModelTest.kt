@@ -33,34 +33,33 @@ internal class CharactersViewModelTest {
         collector = ViewModelFlowCollector(viewModel.state, viewModel.events)
     }
 
-    @Test
-    fun `GIVEN use case returns Success WHEN Loading Characters THEN no event should be emitted`() =
+/*    @Test
+    fun `GIVEN use case returns ServerError WHEN Loading Characters THEN SnackBarError event should be emitted`() =
         runTest {
             //GIVEN
-            val result = GOTCharactersItemsResult.Success(
-                listOf(),
-            )
-            coEvery { mockGetGOTCharactersUsecase() } returns result
+            coEvery { mockGetGOTCharactersUsecase() } returns GOTCharactersItemsResult.ServerErrror
 
             //WHEN
             viewModel.loadCharactersList()
 
             //THEN
-            assertContains(viewModel.events.first().toString(), "Error")
-        }
+            val expectedEvent = CharactersViewModel.CharactersUiEvent.ShowSnackBarError(errorMessage)
+
+            assertContains(viewModel.events.first().toString(),errorMessage)
+        }*/
 
     @Test
     fun `GIVEN use case returns NoInternet WHEN Loading Characters THEN SnackBarError event should be emitted`() =
         runTest {
             //GIVEN
-            coEvery { mockGetGOTCharactersUsecase() } returns GOTCharactersItemsResult.NoInternet
+            coEvery { mockGetGOTCharactersUsecase() } returns GOTCharactersItemsResult.Error
 
             //WHEN
             viewModel.loadCharactersList()
 
             //THEN
 
-            assertContains(viewModel.events.first().toString(), "Error")
+            assertContains(viewModel.events.first().toString(), errorMessage)
         }
 
 
