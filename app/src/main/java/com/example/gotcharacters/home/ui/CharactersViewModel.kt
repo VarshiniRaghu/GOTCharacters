@@ -5,17 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.gotcharacters.home.business.model.GOTCharactersItemsResult
 import com.example.gotcharacters.home.business.model.GOTCharactersResult
 import com.example.gotcharacters.home.business.usecase.GetGOTCharactersUsecase
+import com.example.gotcharacters.home.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class CharactersViewModel @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val getGOTCharactersUsecase: GetGOTCharactersUsecase
 ) : ViewModel() {
 
@@ -28,12 +31,12 @@ internal class CharactersViewModel @Inject constructor(
     val state: StateFlow<CharactersUiState> = _state
     private val errorMessageToDisplay: String = "Error"
 
-    private val _events = Channel<CharactersUiEvent>()
-    val events = _events.receiveAsFlow()
+    private val _events = MutableSharedFlow<CharactersUiEvent>()
+    val events: Flow<CharactersUiEvent> = _events
 
-    fun loadCharactersList() = viewModelScope.launch {
+    fun loadCharactersList() = viewModelScope.launch(dispatcher) {
         when (val result = getGOTCharactersUsecase()) {
-            GOTCharactersItemsResult.Error -> _events.send(
+            GOTCharactersItemsResult.Error -> _events.emit(
                 CharactersUiEvent.ShowSnackBarError(
                     errorMessageToDisplay
                 )
@@ -44,19 +47,27 @@ internal class CharactersViewModel @Inject constructor(
                     mapToUI(it)
                 }
                 _state.update {
-                    it.copy(charactersItems = initialCharactersItems, filteredItems = initialCharactersItems)
+                    it.copy(
+                        charactersItems = initialCharactersItems,
+                        filteredItems = initialCharactersItems
+                    )
                 }
             }
         }
     }
 
     /* Used to filter search text from name */
-    fun setSearchText(searchText: String) = viewModelScope.launch {
+    fun setSearchText(searchText: String) = viewModelScope.launch(dispatcher) {
         _state.update { uiState ->
             if (searchText.isEmpty())
                 uiState.copy(filteredItems = uiState.charactersItems)
             else uiState.copy(
-                filteredItems = _state.value.charactersItems.filter { it.name.contains(searchText,ignoreCase = true) })
+                filteredItems = _state.value.charactersItems.filter {
+                    it.name.contains(
+                        searchText,
+                        ignoreCase = true
+                    )
+                })
         }
     }
 
