@@ -56,7 +56,7 @@ internal class CharactersViewModel @Inject constructor(
             if (searchText.isEmpty())
                 uiState.copy(filteredItems = uiState.charactersItems)
             else uiState.copy(
-                filteredItems = _state.value.charactersItems.filter { it.name.contains(searchText) })
+                filteredItems = _state.value.charactersItems.filter { it.name.contains(searchText,ignoreCase = true) })
         }
     }
 
