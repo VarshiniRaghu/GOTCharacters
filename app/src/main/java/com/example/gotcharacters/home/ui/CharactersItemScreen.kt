@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -30,7 +31,8 @@ internal fun CharactersItem(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                fontSize = 32.sp,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 text = charactersUi.name
             )
             if (charactersUi.culture.isEmpty().not())
@@ -43,6 +45,7 @@ internal fun CharactersItem(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
                     text = "Died ${charactersUi.diedDetails}"
                 )
             Text(
