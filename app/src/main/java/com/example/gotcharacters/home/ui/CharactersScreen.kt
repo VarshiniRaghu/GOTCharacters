@@ -15,18 +15,16 @@ internal fun CharactersScreen() {
     LaunchedEffect(Unit) { viewModel.loadCharactersList() }
     val snackBarHostState = remember { SnackbarHostState() }
     val charactersUiState by viewModel.state.collectAsStateWithLifecycle()
-    val charactersUiEvent by viewModel.events.collectAsState(initial = CharactersViewModel.CharactersUiEvent.Idle)
 
-    LaunchedEffect(charactersUiEvent) {
-        when (charactersUiEvent) {
-            is CharactersViewModel.CharactersUiEvent.ShowSnackBarError -> snackBarHostState.showSnackbar(
-                message = "Error"
-            )
-
-            CharactersViewModel.CharactersUiEvent.Idle -> {
-                //Do nothing
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is CharactersViewModel.CharactersUiEvent.ShowSnackBarError -> snackBarHostState.showSnackbar(
+                    message = "Error"
+                )
             }
         }
+
     }
     CharactersListLayout(
         state = charactersUiState, viewModel::setSearchText

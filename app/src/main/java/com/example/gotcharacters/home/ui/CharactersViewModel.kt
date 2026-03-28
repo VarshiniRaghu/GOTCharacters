@@ -77,7 +77,6 @@ internal class CharactersViewModel @Inject constructor(
     )
 
     internal sealed class CharactersUiEvent {
-        data object Idle : CharactersUiEvent()
         data class ShowSnackBarError(val message: String) : CharactersUiEvent()
     }
 
