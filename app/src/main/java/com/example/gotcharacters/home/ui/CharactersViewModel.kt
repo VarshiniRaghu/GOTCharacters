@@ -71,6 +71,11 @@ internal class CharactersViewModel @Inject constructor(
         }
     }
 
+    /* onclick function to display details */
+    fun displayCharacterDetails(charactersUi: CharactersUi) = viewModelScope.launch(dispatcher) {
+        _events.emit(CharactersUiEvent.DisplayCharacterDetails(charactersUi))
+    }
+
     internal data class CharactersUiState(
         val charactersItems: List<CharactersUi>,
         val filteredItems: List<CharactersUi> // Filtered list is used to display searched text results
@@ -78,6 +83,7 @@ internal class CharactersViewModel @Inject constructor(
 
     internal sealed class CharactersUiEvent {
         data class ShowSnackBarError(val message: String) : CharactersUiEvent()
+        data class DisplayCharacterDetails(val charactersUi: CharactersUi) : CharactersUiEvent()
     }
 
 }

@@ -15,18 +15,19 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 internal fun CharactersItem(
-    charactersUi: CharactersUi
+    charactersUi: CharactersUi,
+    onclick: (CharactersUi) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
+            .clickable { onclick(charactersUi) }
     ) {
         Column(
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .padding(start = 16.dp)
-                .clickable { },
+                .padding(start = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(

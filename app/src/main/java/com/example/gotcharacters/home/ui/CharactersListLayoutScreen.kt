@@ -21,6 +21,7 @@ internal fun CharactersListLayout(
         emptyList(), emptyList()
     ),
     onSearch: (String) -> Unit,
+    onClick: (CharactersUi) -> Unit
 ) {
     Column {
         val textFieldState = TextFieldState()
@@ -51,10 +52,10 @@ internal fun CharactersListLayout(
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(
                 items = state.filteredItems,
-                itemContent = {
+                itemContent = { charactersUi ->
                     CharactersItem(
-                        it
-                    )
+                        charactersUi
+                    ) { onClick(it) }
                 }
             )
         }
